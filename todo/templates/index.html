@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo</title>
+</head>
+<body>
+{% if todo_list %}
+    <h1>{{ todo_list.total_tasks }} tasks in "{{ todo_list.name }}"</h1>
+    {% for task in todo_list.tasks %}
+        <form method="post" action="{% url 'delete_task_view' %}">
+            <input type="hidden" id="task" name="task" value="{{ task }}"><br>
+            <input type="submit" value="Delete task: {{ task }}">
+            {% csrf_token %}
+        </form>
+    {% endfor %}
+    <form method="post" action="{% url 'add_task_view' %}">
+        <label>Add new task to todo list:</label><br>
+        <input type="text" id="task" name="task" value="do important stuff"><br>
+        <input type="submit" value="Submit">
+        {% csrf_token %}
+    </form>
+    <form method="post" action="{% url 'delete_todo_view' %}">
+        <input type="submit" value="Delete list: {{ todo_list.name }}">
+        {% csrf_token %}
+    </form>
+{% else %}
+    <h1>Welcome, create a new list</h1>
+    <form method="post" action="{% url 'create_todo_view' %}">
+        <label>Todo list name:</label><br>
+        <input type="text" id="name" name="name" value="Important stuff"><br>
+        <input type="submit" value="Submit">
+        {% csrf_token %}
+    </form>
+{% endif %}
+</body>
+</html>
